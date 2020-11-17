@@ -17,7 +17,15 @@ const PROMPT_NO = 'No';
 
 async function confirm(question: string, modal = true) {
   const result = await vscode.window.showWarningMessage(question, { modal }, PROMPT_NO, PROMPT_YES);
-  return result === PROMPT_YES;
+  if (result === PROMPT_YES) {
+    return true;
+  }
+  else if (result === PROMPT_NO) {
+    return false;
+  }
+  else {
+    return undefined;
+  }
 }
 
 async function promptValue(prompt: string) {
@@ -162,7 +170,7 @@ export default async function createTemplatesTreeProvider(templatesManager: Temp
               }
                 break;
             }
-            if (!params[key]) {
+            if (params[key] === undefined) {
               return vscode.window.showErrorMessage(`${name} creation interrupted`);
             }
             item = iterator.next();
