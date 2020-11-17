@@ -94,12 +94,14 @@ export default async function createTemplatesTreeProvider(templatesManager: Temp
     },
     createFile: async ({ label, path }) => {
       const extension = extname(label);
-      const name = await vscode.window.showInputBox({
-        placeHolder: 'Filename',
-        prompt: `Enter a filename for template ${label}`,
-        value: basename(label, extension),
+      const clipboardContent = await vscode.env.clipboard.readText();
+      const defaultName = clipboardContent ? clipboardContent : basename(label, extension);
+      const usedName = await vscode.window.showInputBox({
+        placeHolder: `${defaultName}`,
+        prompt: `Enter a filename for template ${label}, or leave black to use default`,
       });
-      if (name) {
+      if (usedName != undefined) {
+        const name = usedName ? usedName : defaultName;
         const template = await templatesManager.get(label);
         const dir = (await isDir(path)) ? path : dirname(path);
         const dirName = basename(dir);
