@@ -119,6 +119,9 @@ export default async function createTemplatesTreeProvider(templatesManager: Temp
                 .toISOString()
                 .replace('T', ' ')
                 .replace(/\.\w+/, ''),
+              YEAR: new Date().getFullYear(),
+              WORKSPACE_PATH: vscode.workspace.rootPath,
+              WORKSPACE_NAME: vscode.workspace.name,
             },
             templatesManager.config.customVars,
           );
